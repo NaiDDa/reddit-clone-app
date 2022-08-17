@@ -1,7 +1,13 @@
 import { Exclude, Expose } from "class-transformer";
-import { BeforeInsert, Column, Index, JoinColumn, ManyToOne, OneToMany } from "typeorm";
+import { BeforeInsert, Column, Entity, Index, JoinColumn,ManyToMany, ManyToOne, OneToMany } from "typeorm";
 import BaseEntity  from "./Entity";
+import { makeId, slugify } from "../utils/helpers";
+import Sub from "./Sub";
+import Vote from "./Vote";
+import { User } from "./User";
+import Comment from "./Comment";
 
+@Entity("posts")
 export default class Post extends BaseEntity{
     @Index()
     @Column()
@@ -27,13 +33,13 @@ export default class Post extends BaseEntity{
     @JoinColumn({ name:"username", referencedColumnName: "username"})
     user: User;
 
-    @ManyToMany(()=> Sub, (sub)=> sub.posts)
+    @ManyToOne(()=> Sub, (sub)=> sub.posts)
     @JoinColumn({ name:"subName", referencedColumnName: "name"})
     sub: Sub;
 
     @Exclude()
     @OneToMany(()=> Comment, (comment)=> comment.post)
-    comment: Comment[];
+    comments: Comment[];
 
     @Exclude()
     @OneToMany(()=> Vote, (vote)=> vote.post)
@@ -54,7 +60,7 @@ export default class Post extends BaseEntity{
     protected userVote: number;
 
     setUserVote(user:User) {
-        const index = this.votes?.findIndex(v => v.usename === user.username);
+        const index = this.votes?.findIndex(v => v.username === user.username);
         this.userVote=index > -1 ? this.votes[index].value : 0;
     }
 
