@@ -1,16 +1,17 @@
 import { isEmpty, validate } from "class-validator";
-import { Router, Request, Response } from "express";
+import { Request, Response, Router } from "express";
 import { User } from "../entities/User";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import cookie from "cookie";
 
+
 const mapError = (errors: Object[]) => {
-    return errors.reduce((prev:any, err:any) => {
-        prev[err.property] = Object.entries(err.constraints)[0][1];
-        return prev;
-    },{})
-}
+    return errors.reduce((prev: any, err: any) => {
+      prev[err.property] = Object.entries(err.constraints)[0][1];
+      return prev;
+    }, {});
+  };
 
 const register = async (req: Request, res: Response) => {
     const {email, username, password} = req.body;
@@ -52,7 +53,7 @@ const register = async (req: Request, res: Response) => {
 }
 
 const login = async (req: Request, res: Response) => {
-    const [username, password] = req.body;
+    const {username, password} = req.body;
     try {
         let errors: any = {}
         // 비워져있다면 에러를 프론트엔드로 보내주기.
@@ -77,10 +78,15 @@ const login = async (req: Request, res: Response) => {
             return res.status(401).json({password: "비밀번호가 잘못되었습니다."})
         }
         // 비밀번호가 맞다면 토큰 생성
+       
         const token = jwt.sign({ username }, process.env.JWT_SECRET);
 
         // 쿠키저장
-        res.set("Set-Cookie", cookie.serialize("token", token));
+        res.set("Set-Cookie", cookie.serialize("token", token, {
+            httpOnly: true,
+            maxAge: 60* 60 * 24 * 7,
+            path: "/"
+        }));
 
         return res.json({user, token});
     } catch (error) {
