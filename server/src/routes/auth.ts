@@ -65,10 +65,11 @@ const login = async (req: Request, res: Response) => {
 
         // db 에서 유저 찾기.
         const user = await User.findOneBy({username});
-        if(!user)
+
+        if (!user)
          return res
-         .status(404)
-         .json({username: '사용자 이름이 등록되지 않았습니다.'})
+          .status(404)
+          .json({username: '사용자 이름이 등록되지 않았습니다.'})
 
         // 유저가 있다면 비밀번호 비교하기.
         const passwordMatches = await bcrypt.compare(password, user.password);
@@ -91,7 +92,7 @@ const login = async (req: Request, res: Response) => {
 
         return res.json({user, token});
     } catch (error) {
-        console.log(error);
+        console.error(error);
         return res.status(500).json(error);
     }
 }

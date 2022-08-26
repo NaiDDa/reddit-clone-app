@@ -5,7 +5,6 @@ interface State {
     authenticated: boolean;
     user: User | undefined;
     loading: boolean;
-
 }
 
 const StateContext = createContext<State>({
@@ -28,44 +27,46 @@ const reducer = (state: State, {type, payload}: Action) => {
                 ...state,
                 authenticated: true,
                 user: payload,
-            };
+            }
+            
         case "LOGOUT":
             return{
                 ...state,
                 authenticated: false,
                 user: null,
-            };
+            }
         case "STOP_LOADING":
             return{
                 ...state,
                 loading: false,
-            };
+            }
         default:
         throw new Error(`Unknown action ${type}`);
   }
-};
-
-export const AuthProvider = ({ children }:{ children: React.ReactNode }) => {
+};    
+export const AuthProvider = ({ children } : { children: React.ReactNode }) => {
 
     const [state, defaultDispatch] = useReducer(reducer, {
         user: null,
         authenticated: false,
-        loading: true
+        loading: true,  
     })
-    
-    console.log('state', state);
 
 
     const dispatch = (type: string, payload?: any) => {
         defaultDispatch({ type, payload });
+ 
     }
-
+  
     return(
-    <DispatchContext.Provider value={ dispatch }>
-       <StateContext.Provider value={ state }>{ children }</StateContext.Provider>
-    </DispatchContext.Provider>
+      <DispatchContext.Provider value={ dispatch }>
+           <StateContext.Provider value={ state }>{ children }</StateContext.Provider>
+      </DispatchContext.Provider>
    )
+   
+
 }
+
 
 export const useAuthState = () => useContext(StateContext);
 export const useAuthDispatch = () => useContext(DispatchContext);
