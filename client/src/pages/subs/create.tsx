@@ -1,6 +1,6 @@
 import axios from "axios";
-import router from "next/router";
 import { FormEvent, useState } from "react"
+import { useRouter } from "next/router";
 import InputGroup from "../../components/InputGroup"
 
 const SubCreate = () => {
@@ -8,23 +8,26 @@ const SubCreate = () => {
     const [title, setTitle] = useState("");
     const [discription, setDiscription] = useState("");
     const [errors, setErrors] = useState<any>({});
+    let router = useRouter();
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault();
 
         try {
-            const res = await axios.post("/subs", {name, title, discription})
 
+            const res = await axios.post("/subs", {name, title, discription})
             router.push(`/r/${res.data.name}`)
+
         } catch (error:any) {
+
             console.log(error)
             setErrors(error.response.data)
 
+        }
     }
-
     return (
         <div className="flex flex-col justify-content pt-16">
-            <div className="w-10/12 mx-auto md:w-96">
+            <div className="w-10/12 p-4 mx-auto bg-white rounded md:w-96">
                 <h1 className="mb-2 text-lg font-medium">
                     커뮤니티 만들기
                 </h1>
@@ -68,7 +71,7 @@ const SubCreate = () => {
                     </div>
                     <div className="flex justify-end">
                         <button
-                            className="px-4 py-1 text-sm font-semibold rounded text-white bg-gray border"
+                            className="px-4 py-1 text-sm font-semibold text-white bg-gray-400 border rounded"
                         >
                             커뮤니티 만들기
                         </button>
@@ -78,6 +81,6 @@ const SubCreate = () => {
         </div>
     )
 }
-}
+
 
 export default SubCreate
