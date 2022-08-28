@@ -49,4 +49,4 @@ const router = Router();
 
 router.post("/", userMiddleware, authMiddleware, createSub);
 
-export default router
+export default router;
