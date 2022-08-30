@@ -50,7 +50,7 @@ export const AuthProvider = ({ children } : { children: React.ReactNode }) => {
     const [state, defaultDispatch] = useReducer(reducer, {
         user: null,
         authenticated: false,
-        loading: true,  
+        loading: true
     })
 
 
@@ -65,9 +65,10 @@ export const AuthProvider = ({ children } : { children: React.ReactNode }) => {
                 const res = await axios.get("/auth/me");
                 dispatch("LOGIN", res.data);
             } catch (error) {
-                console.log(error);
+                console.log(error)
             } finally {
-                dispatch("STOP_LOADING")
+                console.log('called')
+                dispatch("STOP_LOADING");
             }
         }
         loadUser();

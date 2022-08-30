@@ -47,6 +47,7 @@ const register = async (req: Request, res: Response) => {
         errors = await validate(user);
 
         if(errors.length > 0) return res.status(400).json(mapError(errors));
+        
         // 유저 정보를 user table에 저장.
         await user.save();
         return res.json(user);
@@ -104,7 +105,7 @@ const login = async (req: Request, res: Response) => {
 }
 
 const router = Router();
-router.get("me", userMiddleware, authMiddleware, me);
+router.get("/me", userMiddleware, authMiddleware, me);
 router.post("/register", register);
 router.post("/login", login);
 
