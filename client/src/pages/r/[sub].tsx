@@ -1,32 +1,57 @@
 import axios from "axios"
 import Image from "next/image";
 import { useRouter } from 'next/router';
-import { useRef } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
+import SideBar from "../../components/SideBar";
+import { useAuthState } from "../../context/auth";
 
 
 const SubPage= () => {
+    const [ownSub, setOwnSub] = useState(false)
+    const {authenticated, user} = useAuthState();
 
-    const fetcher = async (url: string) => {
-        try {
-            const res = await axios.get(url);
-            return res.data;
-        } catch (error: any) {
-            throw error.response.data;
-        }
-    }
+
     const fileInputRef = useRef<HTMLInputElement>(null);
     const router = useRouter();
     const subName = router.query.sub;
-    const {data: sub, error} = useSWR(subName ? `/subs/${subName}` : null, fetcher);
+    const {data: sub, error} = useSWR(subName ? `/subs/${subName}` : null);
 
-    const uploadImage = () => {
 
+    useEffect(() => {
+     if(!sub || !user) return;
+     setOwnSub(authenticated && user.username === sub.username)
+    }, [sub])
+
+
+    const uploadImage = async (event: ChangeEvent<HTMLInputElement>) => {
+        if(event.target.files === null) return;
+
+        const file = event.target.files[0];
+        console.log('file', file);
+
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("type", fileInputRef.current!.name)
+
+        try {
+            await axios.post(`/subs/${sub.name}/upload`, formData, {
+                headers: {"Context-Type": "multipart/form-data"}
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
-    const openFileInput = () => {
-        
+    const openFileInput = (type: string) => {
+        if (!ownSub) return;
+        const fileInput = fileInputRef.current;
+        if(fileInput) {
+            fileInput.name = type;
+            fileInput.click();
+        }
     }
+
     return (
         <>
         {sub &&
@@ -81,7 +106,7 @@ const SubPage= () => {
                 </div>
                 {/* 포스트와 사이드바 */}
                 <div className='flex max-w-5xl px-4 pt-5 mx-auto'>
-                    <div className="w-full md:mr-3 md:w-8/12">{renderPosts} </div>
+                    <div className="w-full md:mr-3 md:w-8/12"> </div>
                     <SideBar sub={sub} />
                 </div>
             </>

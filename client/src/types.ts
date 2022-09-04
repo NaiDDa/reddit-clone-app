@@ -3,9 +3,9 @@ export interface User {
     email: string;
     createdAt: string;
     updatedAt: string;
-}
-
-export interface Sub {
+  }
+  
+  export interface Sub {
     createdAt: string;
     updatedAt: string;
     name: string;
@@ -15,36 +15,38 @@ export interface Sub {
     bannerUrn: string;
     username: string;
     posts: Post[];
-    postCount: string;
-
+    postCount?: string;
+  
     imageUrl: string;
     bannerUrl: string;
-}
-
-export interface Post {
+  }
+  
+  export interface Post {
     identifier: string;
     title: string;
     slug: string;
     body: string;
     subName: string;
+    username: string;
     createdAt: string;
     updatedAt: string;
     sub?: Sub;
-
+  
     url: string;
     userVote?: number;
     voteScore?: number;
     commentCount?: number;
-}
-
-export interface Comment {
+  }
+  
+  export interface Comment {
     identifier: string;
     body: string;
     username: string;
     createdAt: string;
     updatedAt: string;
     post?: Post;
-
-    userVote?: string;
-    voteScore?: string;
-}
+  
+    userVote: number;
+    voteScore: number;
+  }
+  
