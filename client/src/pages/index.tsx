@@ -1,8 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { text } from 'stream/consumers'
-import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 import useSWR from 'swr'
 import axios from 'axios'

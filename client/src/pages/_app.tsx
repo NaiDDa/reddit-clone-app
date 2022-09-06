@@ -2,7 +2,6 @@ import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import Axios  from 'axios'
 import { AuthProvider } from '../context/auth'
-import { useReducer } from 'react'
 import { useRouter } from 'next/router'
 import NavBar from '../components/NavBar'
 import { SWRConfig } from 'swr'
@@ -45,8 +44,6 @@ function MyApp({ Component, pageProps }: AppProps) {
     </AuthProvider>
   </SWRConfig>
 </>
-  
-
 }
 
 export default MyApp

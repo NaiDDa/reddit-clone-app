@@ -37,6 +37,7 @@ const PostPage = () => {
     }
 
     const vote = async (value: number, comment?: Comment) => {
+        // 로그인이 안되있다면 로그인 페이지로 이동 
         if (!authenticated) router.push("/login");
 
         // 이미 클릭 한 vote 버튼을 눌렀을 시에는 reset
