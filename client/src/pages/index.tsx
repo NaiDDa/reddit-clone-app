@@ -4,15 +4,25 @@ import Image from 'next/image'
 import Link from 'next/link'
 import useSWR from 'swr'
 import axios from 'axios'
-import { Sub } from '../types'
+import { Post, Sub } from '../types'
 import { useAuthState } from '../context/auth'
+import useSWRInfinite from 'swr/infinite'
 
 const Home: NextPage = () => {
   const { authenticated } = useAuthState();
+
   const fetcher = async (url: string) => {
    return await axios.get(url).then(res => res.data)
   }
-  const address = "http://localhost:4000/api/subs/sub/topSubs"
+  const address = "http://localhost:4000/api/subs/sub/topSubs";
+
+  const getKey = (pageIndex: number, previousPageData: Post[]) => {
+    if(previousPageData && !previousPageData.length) return null;
+    return `/posts?page=${pageIndex}`; 
+  }
+  const {data, error, size: page, setSize: setPage, isValidating, mutate } = useSWRInfinite<Post[]>(getKey);
+  const isInitialLoading = !data && !error;
+  const posts: Post[] = data? ([] as Post[]).concat(...data) : [];
   const {data: topSubs} = useSWR<Sub[]>(address, fetcher)
 
 

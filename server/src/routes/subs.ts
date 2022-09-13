@@ -182,6 +182,12 @@ const router = Router();
 router.get("/:name", userMiddleware, getSub)
 router.post("/", userMiddleware, authMiddleware, createSub);
 router.get("/sub/topSubs", topSubs)
-router.post("/:name/upload", userMiddleware, authMiddleware, ownSub, upload.single("file"), uploadSubImage);
-
+router.post(
+    "/:name/upload",
+    userMiddleware,
+    authMiddleware,
+    ownSub,
+    upload.single("file"),
+    uploadSubImage
+  );
 export default router;

@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs"
 import Post from "./Post";
 import Vote from "./Vote";
 import BaseEntity  from "./Entity";
+
 @Entity("users")
 export class User extends BaseEntity {
     @Index()

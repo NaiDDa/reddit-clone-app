@@ -34,13 +34,13 @@ export default class Sub extends BaseEntity {
     posts: Post[]
 
     @Expose()
-    get imageUrl(): string {
+    get imageUrl(): string {   
         return this.imageUrn ? `${process.env.APP_URL}/images/${this.imageUrn}` :
         "https://www.gravatar.com/avatar?d=mp&f=y"
     }
     @Expose()
     get bannerUrl(): string {
-        return this.bannerUrl ? `${process.env.APP_URL}/images/${this.bannerUrl}` :
+        return this.bannerUrl ? `${process.env.APP_URL}/images/${this.bannerUrn}` :
         undefined
     }
 }
