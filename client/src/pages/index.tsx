@@ -7,6 +7,7 @@ import axios from 'axios'
 import { Post, Sub } from '../types'
 import { useAuthState } from '../context/auth'
 import useSWRInfinite from 'swr/infinite'
+import PostCard from '../components/PostCard'
 
 const Home: NextPage = () => {
   const { authenticated } = useAuthState();
@@ -14,7 +15,9 @@ const Home: NextPage = () => {
   const fetcher = async (url: string) => {
    return await axios.get(url).then(res => res.data)
   }
+
   const address = "http://localhost:4000/api/subs/sub/topSubs";
+
 
   const getKey = (pageIndex: number, previousPageData: Post[]) => {
     if(previousPageData && !previousPageData.length) return null;
@@ -29,7 +32,18 @@ const Home: NextPage = () => {
   return (
     <div className="flex max-w-5xl px-4 pt-5 mx-auto">
       {/* 포스트 리스트*/}
-      <div className="w-full md:mr-3 md:w-8/12">  </div>
+      <div className="w-full md:mr-3 md:w-8/12">
+      {isInitialLoading && <p className="text-lg text-center">로딩중입니다...</p>}
+      {posts?.map(post => (
+        <PostCard
+        key={post.identifier}
+        post={post}
+        mutate={mutate}
+        />
+      ))}
+
+
+      </div>
   
       {/* 사이드바 */}
     <div className="hidden w-4/12 ml-3 md:block">
@@ -71,7 +85,8 @@ const Home: NextPage = () => {
             커뮤니티 만들기
           </a>
         </Link>
-      </div>}
+      </div>
+      }
 
       </div>
     </div>

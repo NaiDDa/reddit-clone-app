@@ -2,7 +2,7 @@ import axios from "axios"
 import Image from "next/image";
 import { useRouter } from 'next/router';
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 import PostCard from "../../components/PostCard";
 import SideBar from "../../components/SideBar";
 import { useAuthState } from "../../context/auth";
@@ -44,7 +44,7 @@ const SubPage= () => {
     }
 
     const openFileInput = (type: string) => {
-        if (!ownSub) return;
+        //if (!ownSub) return;
         const fileInput = fileInputRef.current;
         if(fileInput) {
             fileInput.name = type;

@@ -42,7 +42,7 @@ const reducer = (state: State, {type, payload}: Action) => {
                 loading: false,
             }
         default:
-        throw new Error(`Unknown action ${type}`);
+        throw new Error(`Unknown action type: ${type}`);
   }
 };    
 export const AuthProvider = ({ children } : { children: React.ReactNode }) => {
@@ -67,7 +67,7 @@ export const AuthProvider = ({ children } : { children: React.ReactNode }) => {
             } catch (error) {
                 console.log(error)
             } finally {
-                console.log('called')
+               
                 dispatch("STOP_LOADING");
             }
         }

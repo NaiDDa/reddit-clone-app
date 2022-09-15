@@ -1,11 +1,11 @@
 import { Exclude, Expose } from "class-transformer";
-import { ValidationTypes } from "class-validator";
 import { BeforeInsert, Column, Entity, Index, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import  BaseEntity  from "./Entity";
 import Post from "./Post";
 import Vote from "./Vote";
 import { User } from "./User";
 import { makeId } from "../utils/helpers";
+
 @Entity("comments")
 export default class Comment extends BaseEntity {
     @Index()
@@ -35,7 +35,7 @@ export default class Comment extends BaseEntity {
     protected userVote: number;
 
     setUserVote(user: User) {
-        const index = this.votes.findIndex(v => v.username === user.username);
+        const index = this.votes?.findIndex(v => v.username === user.username);
         this.userVote = index > -1 ? this.votes[index].value : 0;
     }
 
