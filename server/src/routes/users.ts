@@ -6,7 +6,10 @@ import Comment from "../entities/Comment";
 
 const getUserData = async (req: Request, res: Response) => {
     try {
-        //유저 정보 가져오기
+        // 유저 정보 가져오기
+        // 여기서 comments와 votes을 relation으로 넣어주는 이유는
+        // Post Entity에서 commentCount의 this.comments와
+        // voteScore의 this.votes를 가져오기 위해서이다.
         const user = await User.findOneOrFail({
             where: { username: req.params.username },
             select: ["username", "createdAt"],
@@ -32,6 +35,10 @@ const getUserData = async (req: Request, res: Response) => {
 
         let userData: any[] = [];
 
+
+        // toJSON() 해주는 이유는
+        // spread operator를 이용해서 새로운 객체로 복사를 할 때 인스턴스 상태로 하면
+        // @Expose 를 이용한 getter는 들어가지 않는다. 그래서 객체로 바꾼 후 복사해준다.
         posts.forEach((p) => userData.push({ type: "Post", ...p.toJSON() }));
         comments.forEach((c) => userData.push({ type: "Comment", ...c.toJSON() }));
 
